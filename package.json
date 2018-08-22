@@ -7,7 +7,7 @@
     "type": "git",
     "url": "https://github.com/iwonrimath/mathquill.git"
   },
-  "script": {
+  "scripts": {
     "postinstall": "make"
   },
   "main": "build/mathquill.js",
