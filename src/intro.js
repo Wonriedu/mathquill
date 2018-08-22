@@ -7,10 +7,11 @@
  * was not distributed with this file, You can obtain
  * one at http://mozilla.org/MPL/2.0/.
  */
+import $ from 'jquery';
 
-(function() {
+export default (function(jQ) {
 
-var jQuery = window.jQuery,
+var jQuery = jQ,
   undefined,
   mqCmdId = 'mathquill-command-id',
   mqBlockId = 'mathquill-block-id',

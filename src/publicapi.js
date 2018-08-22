@@ -27,7 +27,8 @@ function insistOnInterVer() {
 }
 // globally exported API object
 function MathQuill(el) {
-  insistOnInterVer();
+  // not needed with es6 module
+  // insistOnInterVer();
   return MQ1(el);
 };
 MathQuill.prototype = Progenote.p;
@@ -261,12 +262,14 @@ function getInterface(v) {
   return MQ;
 }
 
+/*
 MathQuill.noConflict = function() {
   window.MathQuill = origMathQuill;
   return MathQuill;
 };
 var origMathQuill = window.MathQuill;
 window.MathQuill = MathQuill;
+*/
 
 function RootBlockMixin(_) {
   var names = 'moveOutOf deleteOutOf selectOutOf upOutOf downOutOf'.split(' ');
