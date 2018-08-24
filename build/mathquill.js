@@ -1,5 +1,5 @@
 /**
- * MathQuill v0.10.1, by Han, Jeanine, and Mary
+ * MathQuill v0.11.0, by Han, Jeanine, and Mary
  * http://mathquill.com | maintainers@mathquill.com
  *
  * This Source Code Form is subject to the terms of the
@@ -938,7 +938,7 @@ function MathQuill(el) {
   return MQ1(el);
 };
 MathQuill.prototype = Progenote.p;
-MathQuill.VERSION = "v0.10.1";
+MathQuill.VERSION = "v0.11.0";
 MathQuill.interfaceVersion = function(v) {
   // shim for #459-era interface versioning (ended with #495)
   if (v !== 1) throw 'Only interface version 1 supported. You specified: ' + v;
@@ -1457,7 +1457,9 @@ var saneKeyboardEvents = (function() {
 
     46: 'Del',
 
-    144: 'NumLock'
+    144: 'NumLock',
+
+    220: '\\',
   };
 
   // To the extent possible, create a normalized string representation
@@ -1843,6 +1845,10 @@ Node.open(function(_) {
     case 'Ctrl-A':
       ctrlr.notify('move').cursor.insAtRightEnd(ctrlr.root);
       while (cursor[L]) ctrlr.selectLeft();
+      break;
+
+    case '\\':
+      ctrlr.handle('slashWrite');
       break;
 
     default:

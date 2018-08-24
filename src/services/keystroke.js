@@ -129,6 +129,10 @@ Node.open(function(_) {
       while (cursor[L]) ctrlr.selectLeft();
       break;
 
+    case '\\':
+      ctrlr.handle('slashWrite');
+      break;
+
     default:
       return;
     }
