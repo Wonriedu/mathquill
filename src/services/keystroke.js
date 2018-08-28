@@ -129,6 +129,17 @@ Node.open(function(_) {
       while (cursor[L]) ctrlr.selectLeft();
       break;
 
+    case 'Meta-Z':
+    case 'Ctrl-Z':
+      ctrlr.handle('undo');
+      break;
+
+    case 'Meta-Shift-Z':
+    case 'Ctrl-Shift-Z':
+    case 'Ctrl-Y': // for windows
+      ctrlr.handle('redo');
+      break;
+
     case '\\':
       ctrlr.handle('slashWrite');
       break;
