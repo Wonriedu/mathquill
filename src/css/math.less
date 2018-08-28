@@ -50,7 +50,7 @@
 
   .mq-text-mode {
     display: inline-block;
-    white-space: pre;  
+    white-space: pre;
   }
 
   .mq-text-mode.mq-hasCursor {
@@ -236,7 +236,16 @@
   var.mq-operator-name.mq-last, .mq-supsub.mq-after-operator-name {
     padding-right: .2em;
   }
-
+  .mq-operatorname {
+    position: relative;
+    bottom: -0.02em;
+    font-family: Symbola, "Times New Roman", serif;
+    line-height: .9;
+    font-style: normal;
+  }
+  .mq-operatorname > * {
+    font-style: normal !important;
+  }
   ////
   // \frac
   // fractions
@@ -311,7 +320,7 @@
     display: block;
     text-align: center;
   }
-  
+
   .mq-hat-prefix {
     display: block;
     text-align: center;

@@ -1,5 +1,5 @@
 /**
- * MathQuill v0.11.0, by Han, Jeanine, and Mary
+ * MathQuill v0.11.2, by Han, Jeanine, and Mary
  * http://mathquill.com | maintainers@mathquill.com
  *
  * This Source Code Form is subject to the terms of the
@@ -938,7 +938,7 @@ function MathQuill(el) {
   return MQ1(el);
 };
 MathQuill.prototype = Progenote.p;
-MathQuill.VERSION = "v0.11.0";
+MathQuill.VERSION = "v0.11.2";
 MathQuill.interfaceVersion = function(v) {
   // shim for #459-era interface versioning (ended with #495)
   if (v !== 1) throw 'Only interface version 1 supported. You specified: ' + v;
@@ -3948,11 +3948,16 @@ for (var fn in AutoOpNames) if (AutoOpNames.hasOwnProperty(fn)) {
   LatexCmds[fn] = OperatorName;
 }
 LatexCmds.operatorname = P(MathCommand, function(_) {
+  _.init = function() {
+    super_.init.call(this, '\\operatorname', '<span class="mq-non-leaf mq-operatorname">'
+            + '&0'
+            + '</span>');
+  }
   _.createLeftOf = noop;
-  _.numBlocks = function() { return 1; };
+  /* _.numBlocks = function() { return 1; };
   _.parser = function() {
     return latexMathParser.block.map(function(b) { return b.children(); });
-  };
+  }; */
 });
 
 LatexCmds.f = P(Letter, function(_, super_) {
@@ -4163,7 +4168,7 @@ var PlusMinus = P(BinaryOperator, function(_) {
 
       return 'mq-binary-operator';
     };
-    
+
     if (dir === R) return; // ignore if sibling only changed on the right
     this.jQ[0].className = determineOpClassType(this);
     return this;

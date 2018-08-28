@@ -236,11 +236,16 @@ for (var fn in AutoOpNames) if (AutoOpNames.hasOwnProperty(fn)) {
   LatexCmds[fn] = OperatorName;
 }
 LatexCmds.operatorname = P(MathCommand, function(_) {
+  _.init = function() {
+    super_.init.call(this, '\\operatorname', '<span class="mq-non-leaf mq-operatorname">'
+            + '&0'
+            + '</span>');
+  }
   _.createLeftOf = noop;
-  _.numBlocks = function() { return 1; };
+  /* _.numBlocks = function() { return 1; };
   _.parser = function() {
     return latexMathParser.block.map(function(b) { return b.children(); });
-  };
+  }; */
 });
 
 LatexCmds.f = P(Letter, function(_, super_) {
@@ -451,7 +456,7 @@ var PlusMinus = P(BinaryOperator, function(_) {
 
       return 'mq-binary-operator';
     };
-    
+
     if (dir === R) return; // ignore if sibling only changed on the right
     this.jQ[0].className = determineOpClassType(this);
     return this;
