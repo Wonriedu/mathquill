@@ -238,6 +238,10 @@ function getInterface(v) {
       this.__controller.cursor.options.ignoreNextMousedown = fn;
       return this;
     };
+    _.getCursorPosition = function() {
+      var cursor = this.__controller.cursor;
+      return cursor.jQ.position();
+    }
   });
   MQ.EditableField = function() { throw "wtf don't call me, I'm 'abstract'"; };
   MQ.EditableField.prototype = APIClasses.EditableField.prototype;

@@ -9,6 +9,7 @@
  */
 import $ from 'jquery';
 
+/* eslint-disable */
 export default (function(jQ) {
 
 var jQuery = jQ,

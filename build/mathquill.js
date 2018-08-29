@@ -1,5 +1,5 @@
 /**
- * MathQuill v0.11.3, by Han, Jeanine, and Mary
+ * MathQuill v0.11.4, by Han, Jeanine, and Mary
  * http://mathquill.com | maintainers@mathquill.com
  *
  * This Source Code Form is subject to the terms of the
@@ -9,6 +9,7 @@
  */
 import $ from 'jquery';
 
+/* eslint-disable */
 export default (function(jQ) {
 
 var jQuery = jQ,
@@ -938,7 +939,7 @@ function MathQuill(el) {
   return MQ1(el);
 };
 MathQuill.prototype = Progenote.p;
-MathQuill.VERSION = "v0.11.3";
+MathQuill.VERSION = "v0.11.4";
 MathQuill.interfaceVersion = function(v) {
   // shim for #459-era interface versioning (ended with #495)
   if (v !== 1) throw 'Only interface version 1 supported. You specified: ' + v;
@@ -1144,6 +1145,10 @@ function getInterface(v) {
       this.__controller.cursor.options.ignoreNextMousedown = fn;
       return this;
     };
+    _.getCursorPosition = function() {
+      var cursor = this.__controller.cursor;
+      return cursor.jQ.position();
+    }
   });
   MQ.EditableField = function() { throw "wtf don't call me, I'm 'abstract'"; };
   MQ.EditableField.prototype = APIClasses.EditableField.prototype;
