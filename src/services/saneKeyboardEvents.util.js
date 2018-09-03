@@ -215,6 +215,9 @@ var saneKeyboardEvents = (function() {
     function onBlur() { keydown = keypress = null; }
 
     function onPaste(e) {
+      // do not paste upper module
+      e.stopPropagation();
+
       // browsers are dumb.
       //
       // In Linux, middle-click pasting causes onPaste to be called,

@@ -426,3 +426,49 @@
     }
   }
 }
+
+.mq-matrix {
+  display: inline-table;
+  font-size: 80%;
+  vertical-align: middle;
+  > span.mq-row {
+    display: table-row;
+    > span.mq-cell {
+      display: table-cell;
+      text-align: center;
+      padding: 0 2px 0 2px;
+      border-collapse: collapse;
+      border-spacing: 2px;
+      border: 1px solid transparent;
+      &.mq-empty {
+        border-color: rgba(0, 0, 0, .1);
+      }
+    }
+  }
+}
+.mq-matrix.mq-aligned > span.mq-row > span.mq-cell:first-child {
+  text-align: right;
+}
+.mq-matrix.mq-aligned > span.mq-row > span.mq-cell:last-child {
+  text-align: left;
+}
+.mq-matrix.mq-cases {
+  position: relative;
+  min-height: 35px;
+  padding-left: 10px;
+  &:before {
+    content: "";
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 0.5em;
+    background: url('data:image/svg+xml;utf8,<svg width="5" height="30" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" viewBox="0 0 5 28"><g><path stroke="null" id="svg_1" d="m2.897353,1.533979q0,-0.023986 -0.031981,-0.023986q-0.045306,0 -0.135918,0.045306q-0.602303,0.322472 -0.868809,1.026047t-0.266506,1.937497l0.431739,0l0,-0.271836q0,-0.330467 0.007995,-0.562327t0.050636,-0.567657t0.114597,-0.580983t0.2212,-0.485041t0.351788,-0.397094q0.127923,-0.090612 0.127923,-0.122593l-0.002665,0.002665zm-1.305878,2.936894l0,8.128427l0.431739,0l0,-8.128427l-0.431739,0zm0.431739,8.128427l-0.431739,0l0,0.090612q0,0.330467 -0.090612,0.604968t-0.213205,0.426409t-0.258511,0.255846t-0.21587,0.141248t-0.093277,0.037311l0,0.007995q0.013325,0 0.093277,0.037311t0.21587,0.143913t0.258511,0.263841t0.213205,0.431739t0.090612,0.604968l0,0.090612l0.431739,0l0,-0.090612q0,-0.181224 -0.037311,-0.367778t-0.133253,-0.399759t-0.287826,-0.402424t-0.46372,-0.306482q0.271836,-0.114597 0.46372,-0.301152t0.287826,-0.402424t0.133253,-0.402424t0.037311,-0.370443l0,-0.090612l0,-0.002665zm-0.431739,3.080807l0,8.128427l0.431739,0l0,-8.128427l-0.431739,0z"/>  <path stroke="null" id="svg_2" d="m2.89716,26.700193q0,0.025714 -0.034286,0.025714q-0.048572,0 -0.145715,-0.048572q-0.645719,-0.345717 -0.931435,-1.100008t-0.285716,-2.077158l0.46286,0l0,0.291431q0,0.354288 0.008571,0.602862t0.054286,0.608576t0.122858,0.622862t0.237145,0.520004t0.377146,0.425717q0.137144,0.097144 0.137144,0.13143l-0.002857,-0.002857z"/> </g></svg>');
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+  > span.mq-row > span.mq-cell {
+    text-align: left;
+  }
+}

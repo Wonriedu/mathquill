@@ -1,5 +1,5 @@
 /**
- * MathQuill v0.11.4, by Han, Jeanine, and Mary
+ * MathQuill v0.11.5, by Han, Jeanine, and Mary
  * http://mathquill.com | maintainers@mathquill.com
  *
  * This Source Code Form is subject to the terms of the
@@ -939,7 +939,7 @@ function MathQuill(el) {
   return MQ1(el);
 };
 MathQuill.prototype = Progenote.p;
-MathQuill.VERSION = "v0.11.4";
+MathQuill.VERSION = "v0.11.5";
 MathQuill.interfaceVersion = function(v) {
   // shim for #459-era interface versioning (ended with #495)
   if (v !== 1) throw 'Only interface version 1 supported. You specified: ' + v;
@@ -1615,6 +1615,9 @@ var saneKeyboardEvents = (function() {
     function onBlur() { keydown = keypress = null; }
 
     function onPaste(e) {
+      // do not paste upper module
+      e.stopPropagation();
+
       // browsers are dumb.
       //
       // In Linux, middle-click pasting causes onPaste to be called,
@@ -5054,11 +5057,108 @@ LatexCmds.binomial = P(P(MathCommand, DelimsMixin), function(_, super_) {
     + '</span>'
   ;
   _.textTemplate = ['choose(',',',')'];
+  _.finalizeTree = function() {
+    this.upInto = this.ends[R].upOutOf = this.ends[L];
+    this.downInto = this.ends[L].downOutOf = this.ends[R];
+  }
 });
 
 var Choose =
 LatexCmds.choose = P(Binomial, function(_) {
   _.createLeftOf = LiveFraction.prototype.createLeftOf;
+});
+
+var Matrix =
+LatexCmds.begin = P(MathCommand, function (_, _super) {
+  _.ctrlSeq = '\\matrix';
+  _.numBlocks = function () {
+    return this.col * this.row;
+  };
+  _.init = function (col, row, type = 'matrix') {
+    this.col = col;
+    this.row = row;
+    this.type = type;
+    var html = '';
+    for (var i = 0; i < row; i++) {
+      var r = '';
+      for (var j = 0; j < col; j++)
+        r += '<span class="mq-cell">&' + (i * col + j) + '</span>'
+      html += '<span class="mq-row">' + r + '</span>';
+    }
+    html =  '<span class="mq-matrix mq-' + this.type + '">'
+         + html
+         + '</span>';
+    _super.init.call(this, this.ctrlSeq, html, [ 'text' ]);
+  };
+  _.latex = function () {
+    var latex = '';
+    var index = 1;
+    var c = this.col;
+    var numBlocks = this.numBlocks();
+     this.eachChild(function (child) {
+      if (child.ends[L])
+        latex += child.latex();
+      if ((index) != numBlocks) {
+        if (index % c == 0)
+          latex += " \\\\ ";
+        else
+          latex += " & ";
+      }
+      index++;
+    });
+    return '\\begin{' + this.type + '}' + latex + '\\end{' + this.type + '}';
+  };
+  _.text = function () {
+    var cells = [];
+    this.eachChild(function (child) {
+      if (child.ends[L])
+        cells.push(child.text())
+    });
+    return this.type + '[' + this.col + '][' + this.row + ']{' + cells.join(',') + '}';
+  };
+  _.parser = function () {
+    var block = latexMathParser.block;
+    var string = Parser.string;
+    var regex = Parser.regex;
+    var optWhitespace = Parser.optWhitespace;
+    return regex(/^\{[a-zA-Z]+?\}[\s\S]*?\\end\{[a-zA-Z]+?\}/).map(function (body) {
+      console.log(body);
+      var typeRe = /\{([a-zA-Z]+?)\}/i;
+      var reResult = typeRe.exec(body);
+      if (reResult === null) {
+        throw 'Matrix parse error';
+      }
+      var type = reResult[1];
+      body = body.substring(type.length + 2, body.length - (type.length + 6)).trim();
+      var rows = body.split(/\\\\/).map(function (r) {
+        return r.trim();
+      });
+      var rowsCount = rows.length;
+      var colsCount = 0;
+      var cells = [];
+      rows.forEach(function (r) {
+        var cols = r.split(/&/);
+        colsCount = Math.max(colsCount, cols.length);
+        cells = cells.concat(cols);
+      });
+       var matrix = Matrix(colsCount, rowsCount, type);
+       var blocks = matrix.blocks = Array(matrix.numBlocks());
+      for (var i = 0; i < blocks.length; i++) {
+        var newBlock = blocks[i] = latexMathParser.parse(cells[i]);
+        newBlock.adopt(matrix, matrix.ends[R], 0);
+      }
+      return matrix;
+    })
+  };
+  _.finalizeTree = function () {
+    for (var i = 0; i < this.row; i++) {
+      for (var j = 0; j < this.col; j++) {
+        var b = this.blocks[i * this.col + j];
+        b.upOutOf = (i == 0 && j != 0) ? this.blocks[this.row * this.col - this.row + j - 1 ] : this.blocks[(i - 1) * this.col + j];
+        b.downOutOf = ((i + 1) == this.row && (j + 1) != this.col) ? this.blocks[j + 1] : this.blocks[(i + 1) * this.col + j];
+      }
+    }
+  }
 });
 
 LatexCmds.editable = // backcompat with before cfd3620 on #233
